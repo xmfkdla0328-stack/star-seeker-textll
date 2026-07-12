@@ -1,4 +1,4 @@
-{
+export const keywordsData = {
   "ancient_shard": {
     "name": "고대 조각",
     "description": "정체불명의 기지에서 떼어낸 강력한 파동을 뿜어내는 금속 조각입니다."
@@ -11,4 +11,4 @@
     "name": "기지 정보",
     "description": "기지의 외벽 설계를 스캔하여 얻어낸 대략적인 기지 외관 데이터 구조입니다."
   }
-}
+};

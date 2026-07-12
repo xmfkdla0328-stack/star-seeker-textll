@@ -1,4 +1,4 @@
-{
+export const prologueData = {
     "chapterId": "prologue",
     "startNode": "node_001",
     "nodes": {
@@ -76,4 +76,4 @@
         ]
       }
     }
-  }
+  };

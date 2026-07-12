@@ -1,21 +1,16 @@
-/**
- * JSON 스토리 데이터를 기반으로 다음 시나리오 진행 및 분기를 처리하는 엔진 클래스입니다.
- */
 export class StoryEngine {
     constructor(storyData, keywordsData, gameState) {
-      this.story = storyData;       // 로드된 스토리 JSON 데이터
-      this.keywords = keywordsData; // 로드된 전역 키워드 사전
-      this.state = gameState;       // GameState 인스턴스
+      this.story = storyData;       
+      this.keywords = keywordsData; 
+      this.state = gameState;       
       this.currentNode = null;
     }
   
-    // 스토리 시작 노드 설정 및 로드
     start() {
       const startNodeId = this.story.startNode || Object.keys(this.story.nodes)[0];
       return this.loadNode(startNodeId);
     }
   
-    // 특정 ID의 노드로 이동
     loadNode(nodeId) {
       const node = this.story.nodes[nodeId];
       if (!node) {
@@ -27,14 +22,11 @@ export class StoryEngine {
       return this.parseNodeText(node);
     }
   
-    // 텍스트 분석 및 키워드 하이라이팅 마크업 변환
     parseNodeText(node) {
       let parsedText = node.text;
   
-      // [키워드_이름] 형태의 텍스트를 감지하여 강조 HTML 태그로 자동 치환
       const keywordRegex = /\[(.*?)\]/g;
       parsedText = parsedText.replace(keywordRegex, (match, keywordName) => {
-        // JSON 내 매칭되는 실제 키워드 ID 찾기
         const matchedKey = Object.keys(this.keywords).find(
           key => this.keywords[key].name === keywordName.replace('_', ' ')
         );
@@ -52,14 +44,12 @@ export class StoryEngine {
       };
     }
   
-    // 조건(잠금 키워드) 충족 여부를 확인하여 선택지 목록 반환
     getAvailableChoices(node) {
       if (!node.choices) return [];
   
       return node.choices.map(choice => {
         let isLocked = false;
         
-        // 만약 특정 키워드가 필요한 선택지라면
         if (choice.requiredKeywords && choice.requiredKeywords.length > 0) {
           isLocked = choice.requiredKeywords.some(kw => !this.state.hasKeyword(kw));
         }
@@ -71,7 +61,6 @@ export class StoryEngine {
       });
     }
   
-    // 플레이어가 선택지를 눌렀을 때의 효과 반영 및 노드 전환 수행
     selectChoice(choice) {
       if (choice.isLocked) return null;
   
@@ -90,4 +79,3 @@ export class StoryEngine {
       return this.loadNode(choice.nextNode);
     }
   }
-  

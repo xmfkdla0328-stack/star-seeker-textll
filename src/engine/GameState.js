@@ -1,16 +1,12 @@
-/**
- * 플레이어의 실시간 상태 및 획득한 키워드 등을 관리하는 클래스입니다.
- */
 export class GameState {
     constructor() {
       this.health = 100;
       this.fuel = 5;
       this.credits = 50;
-      this.acquiredKeywords = new Set(); // 중복 방지를 위한 Set 사용
-      this.listeners = []; // 상태 변경 감지용 리스너 목록
+      this.acquiredKeywords = new Set();
+      this.listeners = [];
     }
   
-    // 초기 상태로 리셋
     reset() {
       this.health = 100;
       this.fuel = 5;
@@ -19,7 +15,6 @@ export class GameState {
       this.notify();
     }
   
-    // 상태 변화 구독 기능 (UI 업데이트 연동용)
     subscribe(listener) {
       this.listeners.push(listener);
     }
@@ -37,7 +32,6 @@ export class GameState {
       };
     }
   
-    // 상태 변경 헬퍼 메서드들
     updateHealth(amount) {
       this.health = Math.max(0, Math.min(100, this.health + amount));
       this.notify();
@@ -57,13 +51,12 @@ export class GameState {
       if (!this.acquiredKeywords.has(keywordId)) {
         this.acquiredKeywords.add(keywordId);
         this.notify();
-        return true; // 새로 획득함
+        return true;
       }
-      return false; // 이미 보유 중
+      return false;
     }
   
     hasKeyword(keywordId) {
       return this.acquiredKeywords.has(keywordId);
     }
   }
-  
