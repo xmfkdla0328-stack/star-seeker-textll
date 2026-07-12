@@ -3,139 +3,139 @@
 // 콘텐츠(스토리, 스탯, 키워드 조건 등)는 story.js 를 수정하세요.
 // 이 파일은 화면을 어떻게 그리고 판정을 어떻게 계산할지 담당합니다.
 // ============================================================
- 
+
 let state = {
-    stats: {체력:1, 솜씨:1, 지력:1, 매력:1, 직감:1},
-    keywords: new Set(),
-    currentNode: "origin"
+  stats: {체력:1, 솜씨:1, 지력:1, 매력:1, 직감:1},
+  keywords: new Set(),
+  currentNode: "origin"
+};
+
+function addStat(key, val){
+  state.stats[key] = (state.stats[key]||0) + val;
+  if(state.stats[key] < 0) state.stats[key] = 0;
+}
+function addKeyword(kw){ state.keywords.add(kw); }
+function hasKeyword(kw){ return state.keywords.has(kw); }
+
+function statSummary(){
+  return STAT_KEYS.map(k => `${k} ${state.stats[k]}`).join(" · ");
+}
+
+function applyOrigin(key){
+  const o = ORIGINS[key];
+  Object.entries(o.stats).forEach(([k,v]) => addStat(k, v));
+  addKeyword(o.keyword);
+}
+
+// ---------- 렌더 ----------
+function renderStats(){
+  const row = document.getElementById("statRow");
+  row.innerHTML = "";
+  STAT_KEYS.forEach(k => {
+    const chip = document.createElement("div");
+    chip.className = "stat-chip";
+    chip.innerHTML = `<div class="label">${k}</div><div class="value">${state.stats[k]}</div>`;
+    row.appendChild(chip);
+  });
+}
+
+function renderKeywords(){
+  const row = document.getElementById("keywordRow");
+  row.innerHTML = `<span class="kw-label">키워드</span>`;
+  if(state.keywords.size === 0){
+    row.innerHTML += `<span class="kw-empty">없음</span>`;
+    return;
+  }
+  state.keywords.forEach(kw => {
+    const tag = document.createElement("span");
+    tag.className = "kw-tag";
+    tag.textContent = kw;
+    row.appendChild(tag);
+  });
+}
+
+function renderNode(id){
+  if(id === "restart"){
+    state = { stats:{체력:1,솜씨:1,지력:1,매력:1,직감:1}, keywords:new Set(), currentNode:"origin" };
+    renderNode("origin");
+    return;
+  }
+
+  const node = STORY[id];
+  state.currentNode = id;
+  if(node.onEnter) node.onEnter();
+
+  renderStats();
+  renderKeywords();
+
+  const panel = document.getElementById("storyPanel");
+  const text = typeof node.text === "function" ? node.text() : node.text;
+
+  panel.innerHTML = `
+    <div class="story-tag">${node.tag}</div>
+    <div class="story-text">${text}</div>
+    <div class="choices" id="choicesBox"></div>
+  `;
+
+  const box = document.getElementById("choicesBox");
+  node.choices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.className = "choice-btn";
+
+    let locked = false;
+    if(choice.require && choice.require.keyword && !hasKeyword(choice.require.keyword)){
+      locked = true;
+    }
+
+    btn.innerHTML = choice.text +
+      (choice.require ? `<span class="choice-req ${locked ? 'missing':''}">${locked ? '🔒 필요 키워드: ' : '✔ 보유 키워드: '}${choice.require.keyword}</span>` : "");
+
+    if(locked){
+      btn.disabled = true;
+    } else {
+      btn.onclick = () => handleChoice(choice);
+    }
+    box.appendChild(btn);
+  });
+}
+
+function handleChoice(choice){
+  if(choice.onSelect) choice.onSelect();
+
+  if(choice.diceCheck){
+    runDiceCheck(choice.diceCheck);
+    return;
+  }
+  renderNode(choice.goto);
+}
+
+// ---------- 주사위 판정 ----------
+function runDiceCheck(check){
+  const overlay = document.getElementById("diceOverlay");
+  overlay.style.display = "flex";
+  overlay.className = "dice-overlay";
+
+  const mod = state.stats[check.stat] || 0;
+  const roll = Math.floor(Math.random()*6) + 1; // d6
+  const total = roll + mod;
+  const success = total >= check.dc;
+
+  overlay.innerHTML = `
+    <div class="dice-card">
+      <div class="dtitle">DICE CHECK · ${check.stat}</div>
+      <div class="die">${roll}</div>
+      <div class="dice-detail">주사위 ${roll} + ${check.stat} 보정 ${mod} = <b>${total}</b><br>목표 수치(DC): ${check.dc}</div>
+      <div class="dice-result ${success ? 'success':'fail'}">${success ? 'SUCCESS' : 'FAIL'}</div>
+      <button class="dice-continue" id="diceContinue">계속</button>
+    </div>
+  `;
+
+  document.getElementById("diceContinue").onclick = () => {
+    overlay.style.display = "none";
+    if(success && check.onSuccess) check.onSuccess();
+    renderNode(success ? check.success : check.fail);
   };
-   
-  function addStat(key, val){
-    state.stats[key] = (state.stats[key]||0) + val;
-    if(state.stats[key] < 0) state.stats[key] = 0;
-  }
-  function addKeyword(kw){ state.keywords.add(kw); }
-  function hasKeyword(kw){ return state.keywords.has(kw); }
-   
-  function statSummary(){
-    return STAT_KEYS.map(k => `${k} ${state.stats[k]}`).join(" · ");
-  }
-   
-  function applyOrigin(key){
-    const o = ORIGINS[key];
-    Object.entries(o.stats).forEach(([k,v]) => addStat(k, v));
-    addKeyword(o.keyword);
-  }
-   
-  // ---------- 렌더 ----------
-  function renderStats(){
-    const row = document.getElementById("statRow");
-    row.innerHTML = "";
-    STAT_KEYS.forEach(k => {
-      const chip = document.createElement("div");
-      chip.className = "stat-chip";
-      chip.innerHTML = `<div class="label">${k}</div><div class="value">${state.stats[k]}</div>`;
-      row.appendChild(chip);
-    });
-  }
-   
-  function renderKeywords(){
-    const row = document.getElementById("keywordRow");
-    row.innerHTML = `<span class="kw-label">키워드</span>`;
-    if(state.keywords.size === 0){
-      row.innerHTML += `<span class="kw-empty">없음</span>`;
-      return;
-    }
-    state.keywords.forEach(kw => {
-      const tag = document.createElement("span");
-      tag.className = "kw-tag";
-      tag.textContent = kw;
-      row.appendChild(tag);
-    });
-  }
-   
-  function renderNode(id){
-    if(id === "restart"){
-      state = { stats:{체력:1,솜씨:1,지력:1,매력:1,직감:1}, keywords:new Set(), currentNode:"origin" };
-      renderNode("origin");
-      return;
-    }
-   
-    const node = STORY[id];
-    state.currentNode = id;
-    if(node.onEnter) node.onEnter();
-   
-    renderStats();
-    renderKeywords();
-   
-    const panel = document.getElementById("storyPanel");
-    const text = typeof node.text === "function" ? node.text() : node.text;
-   
-    panel.innerHTML = `
-      <div class="story-tag">${node.tag}</div>
-      <div class="story-text">${text}</div>
-      <div class="choices" id="choicesBox"></div>
-    `;
-   
-    const box = document.getElementById("choicesBox");
-    node.choices.forEach(choice => {
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-   
-      let locked = false;
-      if(choice.require && choice.require.keyword && !hasKeyword(choice.require.keyword)){
-        locked = true;
-      }
-   
-      btn.innerHTML = choice.text +
-        (choice.require ? `<span class="choice-req ${locked ? 'missing':''}">${locked ? '🔒 필요 키워드: ' : '✔ 보유 키워드: '}${choice.require.keyword}</span>` : "");
-   
-      if(locked){
-        btn.disabled = true;
-      } else {
-        btn.onclick = () => handleChoice(choice);
-      }
-      box.appendChild(btn);
-    });
-  }
-   
-  function handleChoice(choice){
-    if(choice.onSelect) choice.onSelect();
-   
-    if(choice.diceCheck){
-      runDiceCheck(choice.diceCheck);
-      return;
-    }
-    renderNode(choice.goto);
-  }
-   
-  // ---------- 주사위 판정 ----------
-  function runDiceCheck(check){
-    const overlay = document.getElementById("diceOverlay");
-    overlay.style.display = "flex";
-    overlay.className = "dice-overlay";
-   
-    const mod = state.stats[check.stat] || 0;
-    const roll = Math.floor(Math.random()*6) + 1; // d6
-    const total = roll + mod;
-    const success = total >= check.dc;
-   
-    overlay.innerHTML = `
-      <div class="dice-card">
-        <div class="dtitle">DICE CHECK · ${check.stat}</div>
-        <div class="die">${roll}</div>
-        <div class="dice-detail">주사위 ${roll} + ${check.stat} 보정 ${mod} = <b>${total}</b><br>목표 수치(DC): ${check.dc}</div>
-        <div class="dice-result ${success ? 'success':'fail'}">${success ? 'SUCCESS' : 'FAIL'}</div>
-        <button class="dice-continue" id="diceContinue">계속</button>
-      </div>
-    `;
-   
-    document.getElementById("diceContinue").onclick = () => {
-      overlay.style.display = "none";
-      if(success && check.onSuccess) check.onSuccess();
-      renderNode(success ? check.success : check.fail);
-    };
-  }
-   
-  // ---------- 시작 ----------
-  renderNode("origin");
+}
+
+// ---------- 시작 ----------
+renderNode("origin");
