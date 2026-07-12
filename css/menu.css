@@ -1,0 +1,141 @@
+/* 메인 타이틀 정렬 */
+.flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    text-align: center;
+  }
+  .main-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 46px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin: 12px 0 36px 0;
+    color: var(--navy);
+    text-shadow: 0 2px 10px rgba(28,50,85,0.05);
+  }
+  
+  /* 메뉴 버튼 카드 (가로 나열형) */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 20px auto;
+    max-width: 800px;
+    width: 100%;
+  }
+  .menu-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 40px 20px 30px;
+    min-height: 380px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .menu-card:hover:not([style*="opacity"]) {
+    transform: translateY(-3px);
+    background: var(--glass-strong);
+    box-shadow: 0 10px 24px rgba(90,130,180,0.25);
+  }
+  
+  /* 텍스트 스타일 */
+  .menu-btn-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .menu-btn-subtitle {
+    font-size: 13px;
+    color: var(--navy-soft);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .menu-btn-desc {
+    font-size: 12.5px;
+    color: var(--navy-soft);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  
+  /* [추가] 메뉴 카드 하단 이미지 아이콘 스타일 */
+  .menu-icon {
+    margin-top: auto;
+    display: block;
+    max-width: 80%;     /* 기존 60%에서 80%로 늘려 더 크게 보이게 합니다 */
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.85;
+  }
+  
+  /* 챕터 선택 화면용 리스트 */
+  .chapter-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 20px auto; 
+    max-width: 600px;
+    width: 100%;
+  }
+  .chapter-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 40px 20px 30px;
+    min-height: 440px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .chapter-card:hover:not([style*="opacity"]) {
+    transform: translateY(-3px);
+    background: var(--glass-strong);
+    box-shadow: 0 10px 24px rgba(90,130,180,0.25);
+  }
+  .chapter-card .chap-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .chapter-card .chap-desc {
+    font-size: 12.5px;
+    color: var(--navy-soft);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  .chapter-card .chap-icon {
+    margin-top: auto; 
+    display: block;    
+    max-width: 75%;   
+    height: auto;     
+  }
+  
+  @media (max-width: 520px) {
+    .menu-grid { grid-template-columns: 1fr; }
+    .chapter-list {
+      grid-template-columns: 1fr;
+      max-width: 100%;
+    }
+    .chapter-card {
+      min-height: 380px;
+      padding: 30px 16px;
+    }
+  }

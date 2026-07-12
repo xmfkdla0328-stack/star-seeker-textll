@@ -1,9 +1,41 @@
-import { STAT_KEYS } from '../story/constants.js';
-import { STORY } from '../story/storyHub.js';
-import { state, resetState, hasKeyword } from './state.js';
+import { STAT_KEYS } from '../../story/constants.js';
+import { STORY } from '../../story/storyHub.js';
+import { state, resetState, hasKeyword } from '../state.js';
+import { navigateTo } from '../router.js';
+
+export function setupGameplayLayout() {
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="titlebar">
+      <div class="eyebrow">DEEP SPACE ANOMALY RESPONSE</div>
+      <h1>Star-Seeker</h1>
+    </div>
+
+    <div class="glass status-panel">
+      <div class="stat-row" id="statRow"></div>
+      <div class="keyword-row" id="keywordRow"></div>
+    </div>
+
+    <div class="glass story-panel" id="storyPanel"></div>
+
+    <div style="text-align: center; margin-top: 4px;">
+      <button class="restart-btn" id="btnBackToChapter">이전 화면으로</button>
+    </div>
+
+    <div class="footer-note" style="margin-top: 12px;">정신체 파견 시스템 · 키워드와 스탯이 선택지의 가능성을 결정합니다</div>
+  `;
+  
+  document.getElementById("btnBackToChapter").onclick = () => {
+    resetState();
+    navigateTo('chapter');
+  };
+
+  renderNode("origin");
+}
 
 export function renderStats(){
   const row = document.getElementById("statRow");
+  if(!row) return;
   row.innerHTML = "";
   STAT_KEYS.forEach(k => {
     const chip = document.createElement("div");
@@ -15,6 +47,7 @@ export function renderStats(){
 
 export function renderKeywords(){
   const row = document.getElementById("keywordRow");
+  if(!row) return;
   row.innerHTML = `<span class="kw-label">키워드</span>`;
   if(state.keywords.size === 0){
     row.innerHTML += `<span class="kw-empty">없음</span>`;
@@ -31,7 +64,7 @@ export function renderKeywords(){
 export function renderNode(id){
   if(id === "restart"){
     resetState();
-    renderNode("origin");
+    setupGameplayLayout();
     return;
   }
 
@@ -89,7 +122,7 @@ function runDiceCheck(check){
   overlay.className = "dice-overlay";
 
   const mod = state.stats[check.stat] || 0;
-  const roll = Math.floor(Math.random()*6) + 1; // d6
+  const roll = Math.floor(Math.random()*6) + 1;
   const total = roll + mod;
   const success = total >= check.dc;
 
