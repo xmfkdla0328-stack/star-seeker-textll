@@ -1,13 +1,35 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + JS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star-Seeker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <div class="titlebar">
+    <div class="eyebrow">DEEP SPACE ANOMALY RESPONSE</div>
+    <h1>Star-Seeker</h1>
+  </div>
+ 
+  <div class="glass status-panel">
+    <div class="stat-row" id="statRow"></div>
+    <div class="keyword-row" id="keywordRow"></div>
+  </div>
+ 
+  <div class="glass story-panel" id="storyPanel"></div>
+ 
+  <div class="footer-note">정신체 파견 시스템 · 키워드와 스탯이 선택지의 가능성을 결정합니다</div>
+</div>
+ 
+<div id="diceOverlay" style="display:none;"></div>
+ 
+<!-- 콘텐츠(스토리) 먼저, 엔진(렌더링/로직) 나중에 로드 -->
+<script src="story.js"></script>
+<script src="engine.js"></script>
+</body>
 </html>
+ 
