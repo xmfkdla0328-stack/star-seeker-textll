@@ -17,8 +17,13 @@ export function setupGameplayLayout() {
     </div>
 
     <div class="glass scene-panel is-empty" id="scenePanel">
-      <img class="scene-img" id="sceneImg" src="" alt="">
-      <div class="scene-caption" id="sceneCaption"></div>
+      <div class="scene-frame">
+        <img class="scene-img" id="sceneImg" src="" alt="">
+        <div class="scene-glass"></div>
+        <div class="scene-hover">
+          <div class="scene-caption" id="sceneCaption"></div>
+        </div>
+      </div>
     </div>
 
     <div class="glass story-panel" id="storyPanel"></div>

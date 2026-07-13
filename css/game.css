@@ -76,30 +76,60 @@
 .scene-panel.is-empty{
   display: none;
 }
+/* 프레임 안쪽, 실제 이미지+유리 오버레이가 담기는 영역 */
+.scene-frame{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 11px;
+  overflow: hidden;
+}
 .scene-img{
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
-  border-radius: 11px;   /* 프레임 안쪽 이미지 모서리를 패널보다 살짝 작게 둥글려서 매트 느낌 강조 */
+}
+/* '유리창 너머로 보는' 느낌의 오버레이: 대각선 반사광 + 상단 하이라이트 + 전체 색 틴트 */
+.scene-glass{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.32) 44%, rgba(255,255,255,0.08) 52%, transparent 66%),
+    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 32%),
+    linear-gradient(150deg, rgba(210,234,255,0.15), rgba(255,255,255,0.04));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
+}
+/* 마우스 오버 시에만 나타나는 반투명 검은 오버레이 + 정중앙 위치 정보 */
+.scene-hover{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,18,32,0.52);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.scene-frame:hover .scene-hover{
+  opacity: 1;
 }
 .scene-caption{
-  position: absolute;
-  left: 26px;
-  bottom: 22px;
-  font-size: 11px;
-  letter-spacing: 0.15em;
+  font-size: 13px;
+  letter-spacing: 0.22em;
   font-weight: 700;
   color: #fff;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.55);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
   text-transform: uppercase;
-  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
 }
 @media (max-width: 520px){
   .scene-panel{ aspect-ratio: 2.4 / 1; border-radius: 14px; padding: 7px; }
-  .scene-img{ border-radius: 8px; }
-  .scene-caption{ left: 20px; bottom: 16px; }
+  .scene-frame{ border-radius: 8px; }
 }
 
 /* 인게임 전용: 스토리 출력 패널 */
@@ -152,3 +182,21 @@
 }
 .choice-btn:disabled{
   opacity:0.55;
+  cursor:not-allowed;
+}
+.choice-req{
+  display:block;
+  font-size:11.5px;
+  font-weight:700;
+  margin-top:4px;
+  color:var(--yellow-deep);
+}
+.choice-req.missing{ color:#c15a5a; }
+
+/* 모바일 전용 반응형 뷰포트 처리 */
+@media (max-width:520px){
+  .stat-row{ grid-template-columns: repeat(5,1fr); gap:6px; }
+  .stat-chip{ padding:6px 2px; }
+  .stat-chip .value{ font-size:15px; }
+  .story-panel{ padding:20px 16px; }
+}
