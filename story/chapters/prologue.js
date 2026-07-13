@@ -22,6 +22,8 @@ export const prologueStory = {
 
   arrival: {
     tag: "케일런-9 · 폐허 지대",
+    bg: "images/scenes/ch00_arrival_bg01.jpg",
+    bgCaption: "케일런-9 · 폐허 지대",
     text: "붉은 모래바람 사이로 무너진 첨탑들이 서 있다. 발밑에는 이 세계의 것이 아닌 듯한 정체 불명의 비문이 새겨져 있다.\n\n당신은 정체 불명의 비문을 바라본다.",
     choices: [
       { text: "그냥 지나간다", goto: "signal" },

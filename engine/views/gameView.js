@@ -16,6 +16,11 @@ export function setupGameplayLayout() {
       <div class="keyword-row" id="keywordRow"></div>
     </div>
 
+    <div class="glass scene-panel is-empty" id="scenePanel">
+      <img class="scene-img" id="sceneImg" src="" alt="">
+      <div class="scene-caption" id="sceneCaption"></div>
+    </div>
+
     <div class="glass story-panel" id="storyPanel"></div>
 
     <div style="text-align: center; margin-top: 4px;">
@@ -61,6 +66,26 @@ export function renderKeywords(){
   });
 }
 
+export function renderScene(node){
+  const panel = document.getElementById("scenePanel");
+  const img = document.getElementById("sceneImg");
+  const caption = document.getElementById("sceneCaption");
+  if(!panel || !img || !caption) return;
+
+  // 노드에 bg가 지정되어 있지 않으면 구간 자체를 접어서 빈 공간이 안 남게 함
+  if(!node.bg){
+    panel.classList.add("is-empty");
+    img.removeAttribute("src");
+    caption.textContent = "";
+    return;
+  }
+
+  panel.classList.remove("is-empty");
+  img.src = node.bg;
+  img.alt = node.bgCaption || node.tag || "";
+  caption.textContent = node.bgCaption || "";
+}
+
 export function renderNode(id){
   if(id === "restart"){
     resetState();
@@ -74,6 +99,7 @@ export function renderNode(id){
 
   renderStats();
   renderKeywords();
+  renderScene(node);
 
   const panel = document.getElementById("storyPanel");
   const text = typeof node.text === "function" ? node.text() : node.text;
