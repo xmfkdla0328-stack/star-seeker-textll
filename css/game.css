@@ -60,12 +60,17 @@
 }
 
 /* 인게임 전용: 배경 이미지 구간 (스탯 패널과 스토리 패널 사이) */
+/* 흰색 매트보드(프레임)로 감싸서 다른 유리 패널들과 같은 톤으로 통일 */
 .scene-panel{
   position: relative;
+  box-sizing: border-box;
+  padding: 10px;
   border-radius: 18px;
   overflow: hidden;
   aspect-ratio: 3.6 / 1;
-  background: linear-gradient(135deg, rgba(28,50,85,0.06), rgba(199,230,255,0.4));
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
 }
 /* 아직 이미지가 없는 노드에서는 구간 자체를 접어서 레이아웃에 빈틈이 안 남게 함 */
 .scene-panel.is-empty{
@@ -77,30 +82,24 @@
   object-fit: cover;
   object-position: center;
   display: block;
-}
-/* 이미지 상하 가장자리를 배경 톤으로 살짝 페이드시켜 유리 패널들 사이에 자연스럽게 녹아들게 함 */
-.scene-panel::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  box-shadow:
-    inset 0 22px 26px -20px rgba(255,255,255,0.55),
-    inset 0 -22px 26px -20px rgba(255,255,255,0.55);
+  border-radius: 11px;   /* 프레임 안쪽 이미지 모서리를 패널보다 살짝 작게 둥글려서 매트 느낌 강조 */
 }
 .scene-caption{
   position: absolute;
-  left: 16px;
-  bottom: 12px;
+  left: 26px;
+  bottom: 22px;
   font-size: 11px;
   letter-spacing: 0.15em;
   font-weight: 700;
   color: #fff;
   text-shadow: 0 1px 8px rgba(0,0,0,0.55);
   text-transform: uppercase;
+  z-index: 2;
 }
 @media (max-width: 520px){
-  .scene-panel{ aspect-ratio: 2.4 / 1; border-radius: 14px; }
+  .scene-panel{ aspect-ratio: 2.4 / 1; border-radius: 14px; padding: 7px; }
+  .scene-img{ border-radius: 8px; }
+  .scene-caption{ left: 20px; bottom: 16px; }
 }
 
 /* 인게임 전용: 스토리 출력 패널 */
@@ -153,21 +152,3 @@
 }
 .choice-btn:disabled{
   opacity:0.55;
-  cursor:not-allowed;
-}
-.choice-req{
-  display:block;
-  font-size:11.5px;
-  font-weight:700;
-  margin-top:4px;
-  color:var(--yellow-deep);
-}
-.choice-req.missing{ color:#c15a5a; }
-
-/* 모바일 전용 반응형 뷰포트 처리 */
-@media (max-width:520px){
-  .stat-row{ grid-template-columns: repeat(5,1fr); gap:6px; }
-  .stat-chip{ padding:6px 2px; }
-  .stat-chip .value{ font-size:15px; }
-  .story-panel{ padding:20px 16px; }
-}
