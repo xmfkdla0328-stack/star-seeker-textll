@@ -1,4 +1,4 @@
-import { STAT_KEYS } from '../../story/constants.js';
+import { STAT_KEYS, KEYWORD_DATA } from '../../story/constants.js';
 import { state } from '../state.js';
 
 export function renderStats() {
@@ -25,6 +25,8 @@ export function renderKeywords() {
     const tag = document.createElement("span");
     tag.className = "kw-tag";
     tag.textContent = kw;
+    const desc = KEYWORD_DATA[kw];
+    if (desc) tag.dataset.tooltip = desc;
     row.appendChild(tag);
   });
 }
