@@ -1,0 +1,87 @@
+/* 튜토리얼 / 알림 팝업 */
+.tutorial-popup {
+  position: fixed;
+  z-index: 60;
+  width: 224px;
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 32px rgba(90,130,180,0.28);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  animation: tp-in 0.22s ease;
+}
+.tutorial-popup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(90,130,180,0.34);
+}
+/* 중앙 고정 모드 */
+.tutorial-popup.tp-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+}
+.tutorial-popup.tp-center:hover {
+  transform: translate(-50%, -52%);
+}
+
+@keyframes tp-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* tp-center 진입 애니는 별도 처리 */
+.tutorial-popup.tp-center {
+  animation: tp-in-center 0.22s ease;
+}
+@keyframes tp-in-center {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 8px)); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* 라벨 */
+.tp-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  color: var(--yellow-deep);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+/* 본문 */
+.tp-text {
+  font-size: 13px;
+  color: var(--navy);
+  line-height: 1.7;
+  font-weight: 500;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+/* 페이지 도트 */
+.tp-dots {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.tp-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(100,140,190,0.25);
+  transition: background 0.15s;
+}
+.tp-dot.tp-dot-active {
+  background: var(--yellow-deep);
+}
+/* 하단 힌트 */
+.tp-hint {
+  font-size: 11px;
+  color: var(--navy-soft);
+  text-align: right;
+  font-weight: 600;
+  opacity: 0.65;
+}

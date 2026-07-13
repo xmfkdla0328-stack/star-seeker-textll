@@ -1,6 +1,55 @@
 import { applyOrigin, addStat, addKeyword, statSummary } from '../../engine/state.js';
 
 export const prologueStory = {
+
+  tutorial_awareness: {
+    tag: "SYSTEM · 자아 각성",
+    text: "대상자의 자아 각성을 확인.\n자아 형상 고착을 위하여, 훈련 프로그램을 가동합니다.",
+    tutorial: {
+      scripts: ["선택지를 눌러 이야기를 진행합시다."],
+      anchor: "choices",
+    },
+    choices: [
+      { text: "훈련 프로그램에 응한다.", goto: "tutorial_training" }
+    ]
+  },
+
+  tutorial_training: {
+    tag: "SYSTEM · 훈련 프로그램",
+    text: "훈련 프로그램 가동, 대상 기억: 케일런-9 수호전.\n케일런-9 진입 당시의 기억을 시뮬레이트 합니다.",
+    onEnter: () => addKeyword("케일런-9"),
+    tutorial: {
+      scripts: [
+        "'키워드'를 습득했습니다.",
+        "키워드는 스토리 진행 중 특정 선택지를 선택할 수 있게 해주거나, 이후 스토리 진행을 위한 단서가 되어줍니다.",
+        "획득한 키워드는 스토리 진행 중에는 이 곳에서, 컨텐츠 미진행 중에는 '아카이브' 화면에서 열람 가능합니다."
+      ],
+      anchor: "keywords",
+    },
+    choices: [
+      { text: "케일런-9가 어디인지 묻는다.", goto: "tutorial_kailun" }
+    ]
+  },
+
+  tutorial_kailun: {
+    tag: "SIMULATION · 케일런-9",
+    bg: "images/scenes/ch00_arrival_bg01.jpg",
+    bgCaption: "케일런-9 · 폐허 지대",
+    text: "케일런-9는 골디락스 존에 위치한 별로, 이파 은하 소속의 균류와 양치식물이 번성하였던 행성입니다.\n\n그러니 시뮬레이트 되는 기억 내에서, 케일런-9은 '재앙'의 영향으로 대기의 99%가 소멸.\n이로 인해 생물 종의 99.9%가 사멸하였습니다.",
+    onEnter: () => addKeyword("재앙"),
+    choices: [
+      { text: "재앙이 무엇인지 묻는다.", goto: "tutorial_calamity" }
+    ]
+  },
+
+  tutorial_calamity: {
+    tag: "SIMULATION · 재앙",
+    text: "재앙에 대한 데이터는 현재 심연 기지 최고 기밀로 분류되어 있습니다.\n\n『열람 권한 없음. 파견 임무 완수 후 갱신 예정.』\n\n훈련 프로그램이 종료됩니다. 이제 실제 파견을 준비하십시오.",
+    choices: [
+      { text: "파견 계열을 선택한다.", goto: "origin" }
+    ]
+  },
+
   origin: {
     tag: "PROLOGUE",
     text: "심연 기지, 정신 전송실.\n\n당신의 의식이 임시 육체에 정착하기까지 3초. 관리 AI '시빌'의 음성이 귓가에 울린다.\n\n『정신체 등록 완료. 파견 계열을 선택하십시오.』",

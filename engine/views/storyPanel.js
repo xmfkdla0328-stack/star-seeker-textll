@@ -4,6 +4,7 @@ import { renderStats, renderKeywords } from './statPanel.js';
 import { renderScene } from './scenePanel.js';
 import { runDiceCheck } from './diceOverlay.js';
 import { setupGameplayLayout } from './gameView.js';
+import { showPopup } from './tutorialPopup.js';
 
 export function renderNode(id) {
   if (id === "restart") {
@@ -28,6 +29,10 @@ export function renderNode(id) {
     <div class="story-text">${text}</div>
     <div class="choices" id="choicesBox"></div>
   `;
+
+  if (node.tutorial) {
+    requestAnimationFrame(() => showPopup(node.tutorial));
+  }
 
   const box = document.getElementById("choicesBox");
   node.choices.forEach(choice => {

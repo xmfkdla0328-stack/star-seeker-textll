@@ -39,5 +39,5 @@ export function setupGameplayLayout() {
     navigateTo('chapter');
   };
 
-  renderNode("origin");
+  renderNode("tutorial_awareness");
 }
