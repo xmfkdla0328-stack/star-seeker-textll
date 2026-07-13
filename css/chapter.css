@@ -1,19 +1,19 @@
-/* 메뉴 화면 전용 */
-.menu-grid {
+/* 챕터 선택 화면 전용 */
+.chapter-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
   margin: 20px auto;
-  max-width: 800px;
+  max-width: 600px;
   width: 100%;
 }
-.menu-card {
+.chapter-card {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 40px 20px 30px;
-  min-height: 380px;
+  min-height: 440px;
   text-align: center;
   cursor: pointer;
   background: var(--glass);
@@ -22,41 +22,37 @@
   backdrop-filter: blur(14px);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
-.menu-card:hover:not([style*="opacity"]) {
+.chapter-card:hover:not([style*="opacity"]) {
   transform: translateY(-3px);
   background: var(--glass-strong);
   box-shadow: 0 10px 24px rgba(90,130,180,0.25);
 }
-.menu-btn-title {
-  font-size: 20px;
+.chapter-card .chap-title {
+  font-size: 17px;
   font-weight: 700;
   color: var(--navy);
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
-.menu-btn-subtitle {
-  font-size: 13px;
-  color: var(--navy-soft);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 16px;
-}
-.menu-btn-desc {
+.chapter-card .chap-desc {
   font-size: 12.5px;
   color: var(--navy-soft);
   line-height: 1.6;
   font-weight: 500;
 }
-.menu-icon {
+.chapter-card .chap-icon {
   margin-top: auto;
   display: block;
-  max-width: 80%;
+  max-width: 75%;
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
-  opacity: 0.85;
 }
 
 @media (max-width: 520px) {
-  .menu-grid { grid-template-columns: 1fr; }
+  .chapter-list {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  .chapter-card {
+    min-height: 380px;
+    padding: 30px 16px;
+  }
 }

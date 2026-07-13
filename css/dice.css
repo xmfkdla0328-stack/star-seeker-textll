@@ -1,0 +1,69 @@
+/* 주사위 판정 오버레이 시스템 */
+.dice-overlay{
+  position:fixed;
+  inset:0;
+  background: rgba(28,50,85,0.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+}
+.dice-card{
+  width:280px;
+  padding:28px 22px;
+  border-radius:20px;
+  background: linear-gradient(160deg, #ffffff, #eaf5ff);
+  border:1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 20px 60px rgba(40,70,110,0.35);
+  text-align:center;
+}
+.dice-card .dtitle{
+  font-size:12px;
+  letter-spacing:0.2em;
+  font-weight:700;
+  color:var(--navy-soft);
+  margin-bottom:10px;
+}
+.die{
+  width:74px;height:74px;
+  margin:0 auto 14px;
+  border-radius:16px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif KR',serif;
+  font-size:30px;
+  font-weight:700;
+  box-shadow: 0 8px 20px rgba(28,50,85,0.4);
+  animation: roll 0.9s ease;
+}
+@keyframes roll{
+  0%{ transform: rotate(0deg) scale(0.8); }
+  60%{ transform: rotate(380deg) scale(1.08); }
+  100%{ transform: rotate(360deg) scale(1); }
+}
+.dice-detail{
+  font-size:13px;
+  color:var(--navy-soft);
+  margin-bottom:14px;
+  line-height:1.6;
+}
+.dice-result{
+  font-family:'Noto Serif KR',serif;
+  font-size:19px;
+  font-weight:700;
+  margin-bottom:16px;
+}
+.dice-result.success{ color:#1c8a4c; }
+.dice-result.fail{ color:#c15a5a; }
+.dice-continue{
+  padding:10px 22px;
+  border-radius:999px;
+  border:none;
+  background: var(--yellow);
+  color:#3a2c00;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow: 0 4px 14px rgba(224,168,0,0.4);
+}
