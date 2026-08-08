@@ -1,4 +1,9 @@
 export { KEYWORD_DATA } from './data/keywords.js';
+export {
+  ONBOARDING_STEP_IDS,
+  ONBOARDING_STEPS,
+  getOnboardingStep,
+} from './data/onboarding.js';
 
 export const STAT_KEYS = ["체력","솜씨","지력","매력","직감"];
 

@@ -4,6 +4,7 @@ const STORAGE_VERSION = 1;
 const EMPTY_STORAGE = {
   version: STORAGE_VERSION,
   profile: {
+    codename: 'N03L',
     tutorialCompleted: false,
     archiveKeywords: [],
     discoveredCharacters: [],
@@ -61,6 +62,20 @@ export function getProfile() {
 
 export function isTutorialCompleted() {
   return getProfile().tutorialCompleted === true;
+}
+
+export function getCodename() {
+  return getProfile().codename || 'N03L';
+}
+
+export function saveCodename(codename) {
+  if (typeof codename !== 'string') return false;
+
+  const normalized = codename.trim();
+  if (!normalized || normalized.length > 24) return false;
+
+  updateProfile({ codename: normalized });
+  return true;
 }
 
 export function updateProfile(patch) {
