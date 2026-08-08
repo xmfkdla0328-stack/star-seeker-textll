@@ -3,7 +3,10 @@ const ANCHOR_IDS = {
   keywords: 'keywordRow',
 };
 
+let activePopup = null;
+
 export function showPopup({ scripts, anchor = 'center' }) {
+  hidePopup();
   let current = 0;
   const total = scripts.length;
 
@@ -44,9 +47,15 @@ export function showPopup({ scripts, anchor = 'center' }) {
 
   render();
   document.body.appendChild(popup);
+  activePopup = popup;
 
   // 위치 계산은 DOM paint 이후에 실행
   requestAnimationFrame(() => positionPopup(popup, anchor));
+}
+
+export function hidePopup() {
+  activePopup?.remove();
+  activePopup = null;
 }
 
 function positionPopup(popup, anchor) {

@@ -29,7 +29,7 @@ export function renderChapterScreen() {
   `;
 
   document.getElementById("chap0").onclick = () => {
-    navigateTo('game');
+    navigateTo('game', { mode: 'new' });
   };
   
   document.getElementById("btnBackToMenu").onclick = () => navigateTo('menu');

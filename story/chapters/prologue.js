@@ -1,4 +1,5 @@
 import { applyOrigin, addStat, addKeyword, statSummary } from '../../engine/state.js';
+import { markTutorialCompleted } from '../../engine/storage.js';
 
 export const prologueStory = {
 
@@ -46,7 +47,11 @@ export const prologueStory = {
     tag: "SIMULATION · 재앙",
     text: "재앙에 대한 데이터는 현재 심연 기지 최고 기밀로 분류되어 있습니다.\n\n『열람 권한 없음. 파견 임무 완수 후 갱신 예정.』\n\n훈련 프로그램이 종료됩니다. 이제 실제 파견을 준비하십시오.",
     choices: [
-      { text: "파견 계열을 선택한다.", goto: "origin" }
+      {
+        text: "파견 계열을 선택한다.",
+        goto: "origin",
+        onSelect: () => markTutorialCompleted(),
+      }
     ]
   },
 

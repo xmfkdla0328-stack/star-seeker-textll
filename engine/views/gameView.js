@@ -1,8 +1,9 @@
-import { resetState } from '../state.js';
+import { resetState, restoreState, state } from '../state.js';
 import { navigateTo } from '../router.js';
 import { renderNode } from './storyPanel.js';
+import { getActiveSave, isTutorialCompleted } from '../storage.js';
 
-export function setupGameplayLayout() {
+export function setupGameplayLayout({ mode = 'new' } = {}) {
   const app = document.getElementById("app");
   app.innerHTML = `
     <div class="titlebar">
@@ -39,5 +40,14 @@ export function setupGameplayLayout() {
     navigateTo('chapter');
   };
 
-  renderNode("tutorial_awareness");
+  if (mode === 'resume') {
+    const saved = getActiveSave();
+    if (saved && restoreState(saved)) {
+      renderNode(state.currentNode, { skipOnEnter: true });
+      return;
+    }
+  }
+
+  resetState();
+  renderNode(isTutorialCompleted() ? "origin" : "tutorial_awareness");
 }

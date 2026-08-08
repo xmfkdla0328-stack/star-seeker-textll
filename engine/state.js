@@ -1,10 +1,30 @@
 import { STAT_KEYS, ORIGINS } from '../story/constants.js';
+import { addArchiveKeyword } from './storage.js';
 
 export let state = {
   stats: {체력:1, 솜씨:1, 지력:1, 매력:1, 직감:1},
   keywords: new Set(),
   currentNode: "origin"
 };
+
+export function restoreState(saved) {
+  if (!saved || typeof saved !== 'object' || !saved.currentNode) {
+    return false;
+  }
+
+  const restoredStats = saved.stats && typeof saved.stats === 'object'
+    ? saved.stats
+    : {};
+
+  state.stats = Object.fromEntries(
+    STAT_KEYS.map(key => [key, Number.isFinite(Number(restoredStats[key]))
+      ? Number(restoredStats[key])
+      : 1])
+  );
+  state.keywords = new Set(Array.isArray(saved.keywords) ? saved.keywords : []);
+  state.currentNode = saved.currentNode;
+  return true;
+}
 
 export function resetState() {
   state.stats = {체력:1, 솜씨:1, 지력:1, 매력:1, 직감:1};
@@ -17,8 +37,9 @@ export function addStat(key, val){
   if(state.stats[key] < 0) state.stats[key] = 0;
 }
 
-export function addKeyword(kw){ 
-  state.keywords.add(kw); 
+export function addKeyword(kw){
+  state.keywords.add(kw);
+  addArchiveKeyword(kw);
 }
 
 export function hasKeyword(kw){ 

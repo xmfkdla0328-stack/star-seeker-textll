@@ -5,8 +5,12 @@ import { renderScene } from './scenePanel.js';
 import { runDiceCheck } from './diceOverlay.js';
 import { setupGameplayLayout } from './gameView.js';
 import { showPopup } from './tutorialPopup.js';
+import { hidePopup } from './tutorialPopup.js';
+import { isTutorialCompleted, saveActiveGame } from '../storage.js';
 
-export function renderNode(id) {
+export function renderNode(id, { skipOnEnter = false } = {}) {
+  hidePopup();
+
   if (id === "restart") {
     resetState();
     setupGameplayLayout();
@@ -14,8 +18,13 @@ export function renderNode(id) {
   }
 
   const node = STORY[id];
+  if (!node) {
+    console.error(`스토리 노드를 찾을 수 없습니다: ${id}`);
+    return;
+  }
+
   state.currentNode = id;
-  if (node.onEnter) node.onEnter();
+  if (!skipOnEnter && node.onEnter) node.onEnter();
 
   renderStats();
   renderKeywords();
@@ -30,7 +39,7 @@ export function renderNode(id) {
     <div class="choices" id="choicesBox"></div>
   `;
 
-  if (node.tutorial) {
+  if (node.tutorial && !isTutorialCompleted()) {
     requestAnimationFrame(() => showPopup(node.tutorial));
   }
 
@@ -56,6 +65,15 @@ export function renderNode(id) {
     }
     box.appendChild(btn);
   });
+
+  if (!node.tutorial && isTutorialCompleted()) {
+    saveActiveGame({
+      chapterId: 'prologue',
+      currentNode: state.currentNode,
+      stats: { ...state.stats },
+      keywords: [...state.keywords],
+    });
+  }
 }
 
 function handleChoice(choice) {

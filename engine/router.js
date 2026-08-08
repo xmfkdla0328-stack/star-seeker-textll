@@ -3,7 +3,7 @@ import { renderMenuScreen } from './views/menuView.js';
 import { renderChapterScreen } from './views/chapterScreen.js';
 import { setupGameplayLayout } from './views/gameView.js';
 
-export function navigateTo(screen) {
+export function navigateTo(screen, options = {}) {
   const app = document.getElementById("app");
   if (!app) return;
 
@@ -21,7 +21,7 @@ export function navigateTo(screen) {
       renderChapterScreen();
       break;
     case 'game':
-      setupGameplayLayout();
+      setupGameplayLayout(options);
       break;
   }
 }

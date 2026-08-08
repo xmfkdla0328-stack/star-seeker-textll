@@ -1,4 +1,6 @@
 import { navigateTo } from '../router.js';
+import { hasActiveSave } from '../storage.js';
+import { showResumeDialog } from './resumeDialog.js';
 
 export function renderTitleScreen() {
   const app = document.getElementById("app");
@@ -11,5 +13,15 @@ export function renderTitleScreen() {
     </button>
   `;
   
-  document.getElementById("startBtn").onclick = () => navigateTo('menu');
+  document.getElementById("startBtn").onclick = () => {
+    if (!hasActiveSave()) {
+      navigateTo('menu');
+      return;
+    }
+
+    showResumeDialog({
+      onResume: () => navigateTo('game', { mode: 'resume' }),
+      onNewGame: () => navigateTo('menu'),
+    });
+  };
 }
