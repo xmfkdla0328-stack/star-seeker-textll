@@ -1,6 +1,8 @@
 import { navigateTo } from '../router.js';
-import { hasActiveSave } from '../storage.js';
+import { hasActiveSave, isTutorialCompleted } from '../storage.js';
 import { showResumeDialog } from './resumeDialog.js';
+import { renderOnboardingIdentity } from './onboardingView.js';
+import { startOnboarding } from '../onboarding/onboardingFlow.js';
 
 export function renderTitleScreen() {
   const app = document.getElementById("app");
@@ -14,6 +16,12 @@ export function renderTitleScreen() {
   `;
   
   document.getElementById("startBtn").onclick = () => {
+    if (!isTutorialCompleted()) {
+      startOnboarding();
+      renderOnboardingIdentity();
+      return;
+    }
+
     if (!hasActiveSave()) {
       navigateTo('menu');
       return;
