@@ -11,8 +11,8 @@ export function renderChapterScreen() {
     <div class="chapter-list">
       <div class="glass chapter-card" id="chap0">
         <div class="story-tag" style="margin-bottom: 10px;">CHAPTER 00</div>
-        <div class="chap-title">최종전 : 튜토리얼</div>
-        <div class="chap-desc">태양의 종막을 목도하고, 이야기의 시작을 알립니다.</div>
+        <div class="chap-title">케일런-9</div>
+        <div class="chap-desc">생명체를 찾아보기 힘든, 산소가 희박한 행성입니다.</div>
         <img src="images/chapter00.png" class="chap-icon" alt="Chapter 00 Icon">
       </div>
       
