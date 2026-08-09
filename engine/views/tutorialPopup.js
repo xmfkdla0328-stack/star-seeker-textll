@@ -1,3 +1,10 @@
+function escapeHtml(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 const ANCHOR_IDS = {
   choices:  'choicesBox',
   keywords: 'keywordRow',
@@ -30,7 +37,7 @@ export function showPopup({ scripts, anchor = 'center', onClose } = {}) {
 
     popup.innerHTML = `
       <div class="tp-label">SYSTEM NOTICE</div>
-      <div class="tp-text">${scripts[current]}</div>
+      <div class="tp-text">${escapeHtml(scripts[current])}</div>
       ${dotsHtml}
       <div class="tp-hint">${isLast ? '클릭하여 닫기' : '클릭하여 계속 ›'}</div>
     `;
@@ -83,7 +90,7 @@ export function showCharacterPopup({ character, scripts, onClose } = {}) {
         <img class="cp-portrait" src="${character.image}" alt="${character.name}">
         <div class="cp-name">${character.name}</div>
       </div>
-      <div class="cp-text">${scripts[current]}</div>
+      <div class="cp-text">${escapeHtml(scripts[current])}</div>
       ${dotsHtml}
       <div class="tp-hint">${isLast ? '클릭하여 닫기' : '클릭하여 계속 ›'}</div>
     `;
