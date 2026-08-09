@@ -1,5 +1,9 @@
 import { navigateTo } from '../router.js';
-import { hasActiveSave, isTutorialCompleted } from '../storage.js';
+import {
+  clearActiveSave,
+  hasActiveSave,
+  isTutorialCompleted,
+} from '../storage.js';
 import { showResumeDialog } from './resumeDialog.js';
 import { renderOnboardingIdentity } from './onboardingView.js';
 import { startOnboarding } from '../onboarding/onboardingFlow.js';
@@ -29,7 +33,10 @@ export function renderTitleScreen() {
 
     showResumeDialog({
       onResume: () => navigateTo('game', { mode: 'resume' }),
-      onNewGame: () => navigateTo('menu'),
+      onNewGame: () => {
+        clearActiveSave();
+        navigateTo('menu');
+      },
     });
   };
 }
