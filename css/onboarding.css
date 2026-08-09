@@ -138,6 +138,7 @@
   font: inherit;
   font-size: 15px;
   letter-spacing: 0.08em;
+  text-align: center;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
