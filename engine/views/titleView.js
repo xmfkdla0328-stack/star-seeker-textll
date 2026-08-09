@@ -5,10 +5,13 @@ import {
   isTutorialCompleted,
 } from '../storage.js';
 import { showResumeDialog } from './resumeDialog.js';
-import { renderOnboardingIdentity } from './onboardingView.js';
+import {
+  renderOnboardingIdentity,
+  renderOnboardingTitleGuide,
+} from './onboardingView.js';
 import { startOnboarding } from '../onboarding/onboardingFlow.js';
 
-export function renderTitleScreen() {
+export function renderTitleScreen({ onboardingGuide = false } = {}) {
   const app = document.getElementById("app");
   app.className = "app flex-center"; // 중앙 정렬 스타일 부여
   app.innerHTML = `
@@ -18,7 +21,12 @@ export function renderTitleScreen() {
       시스템 접속 (START)
     </button>
   `;
-  
+
+  if (onboardingGuide) {
+    renderOnboardingTitleGuide();
+    return;
+  }
+
   document.getElementById("startBtn").onclick = () => {
     if (!isTutorialCompleted()) {
       startOnboarding();

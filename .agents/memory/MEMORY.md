@@ -1,0 +1,1 @@
+- [개발 프리뷰 저장 초기화](dev-preview-storage-reset.md) — 온보딩 반복 테스트를 위해 Vite 개발 환경에서만 새로고침 시 localStorage를 초기화한다.

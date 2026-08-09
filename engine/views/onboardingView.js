@@ -1,4 +1,5 @@
 import {
+  advanceOnboardingScript,
   getCurrentOnboardingStep,
   getOnboardingState,
   moveToNextOnboardingStep,
@@ -155,8 +156,7 @@ function startScanAnimation(durationMs) {
     completeButton.onclick = () => {
       completeButton.disabled = true;
       moveToNextOnboardingStep();
-      // #3 화면은 다음 작업에서 연결합니다.
-      status.textContent = '다음 프로토콜을 준비합니다...';
+      renderOnboardingActivation();
     };
   };
 
@@ -168,4 +168,102 @@ function cancelScanAnimation() {
     cancelAnimationFrame(scanAnimationFrame);
     scanAnimationFrame = null;
   }
+}
+
+export function renderOnboardingActivation() {
+  cancelScanAnimation();
+
+  const state = getOnboardingState();
+  const step = getCurrentOnboardingStep();
+  if (!state || !step) return;
+
+  const app = getApp();
+  app.className = 'app onboarding-app';
+  app.innerHTML = `
+    <main class="onboarding-screen" aria-labelledby="activationTitle">
+      <section class="onboarding-script-window onboarding-activation-window" id="activationWindow" tabindex="0">
+        <div class="onboarding-label" id="activationTitle">PROJECT ACTIVATION</div>
+        <div class="onboarding-script" id="activationScript"></div>
+        <div class="onboarding-next-hint">클릭하여 계속</div>
+      </section>
+    </main>
+  `;
+
+  const script = document.getElementById('activationScript');
+  renderScriptLines(script, step.scripts, state.codename);
+
+  document.getElementById('activationWindow').addEventListener('click', () => {
+    renderTitleGuide();
+  }, { once: true });
+}
+
+function renderTitleGuide() {
+  moveToNextOnboardingStep();
+  renderOnboardingTitleGuide();
+}
+
+export function renderOnboardingTitleGuide() {
+  const state = getOnboardingState();
+  const step = getCurrentOnboardingStep();
+  if (!state || !step) return;
+
+  const app = getApp();
+  app.className = 'app flex-center onboarding-title-app';
+  app.innerHTML = `
+    <div class="eyebrow" style="letter-spacing:0.4em; font-size:12px; color:var(--navy-soft); font-weight:600;">
+      DEEP SPACE ANOMALY RESPONSE
+    </div>
+    <h1 class="main-title">Star-Seeker</h1>
+    <button class="choice-btn" id="startBtn" disabled
+      style="text-align:center; padding: 15px 50px; font-size: 15px; border-radius: 999px; background: var(--glass-strong);">
+      시스템 접속 (START)
+    </button>
+    <button class="onboarding-title-script" id="titleGuideScript" type="button">
+      <span class="onboarding-title-script-label">SYSTEM NOTICE</span>
+      <span class="onboarding-title-script-text" id="titleGuideText"></span>
+      <span class="onboarding-title-script-hint" id="titleGuideHint">클릭하여 계속</span>
+    </button>
+  `;
+
+  const scriptButton = document.getElementById('titleGuideScript');
+  const startButton = document.getElementById('startBtn');
+  const text = document.getElementById('titleGuideText');
+  const hint = document.getElementById('titleGuideHint');
+
+  const renderCurrentScript = () => {
+    const current = getOnboardingState();
+    text.textContent = formatOnboardingText(
+      step.scripts[current.scriptIndex],
+      current.codename
+    );
+    hint.textContent = current.isLastScript
+      ? '마지막 안내입니다. 클릭하여 Start 활성화'
+      : '클릭하여 계속';
+  };
+
+  renderCurrentScript();
+
+  scriptButton.addEventListener('click', () => {
+    const current = getOnboardingState();
+    if (current.isLastScript) {
+      startButton.disabled = false;
+      startButton.classList.add('is-ready');
+      scriptButton.classList.add('is-complete');
+      hint.textContent = '안내 완료';
+      scriptButton.disabled = true;
+      startButton.focus();
+      return;
+    }
+
+    advanceOnboardingScript();
+    renderCurrentScript();
+  });
+
+  startButton.addEventListener('click', () => {
+    moveToNextOnboardingStep();
+    // 메뉴 안내(#5)는 다음 단계에서 연결합니다.
+    document.getElementById('titleGuideScript').remove();
+    startButton.disabled = true;
+    startButton.textContent = '프로젝트 진입 준비 중...';
+  });
 }

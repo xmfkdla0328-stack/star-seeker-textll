@@ -122,3 +122,13 @@ export function clearActiveSave() {
   data.activeSave = null;
   return writeStorage(data);
 }
+
+export function resetStorageForDevelopment() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    return true;
+  } catch (error) {
+    console.warn('개발용 저장 데이터 초기화에 실패했습니다.', error);
+    return false;
+  }
+}
