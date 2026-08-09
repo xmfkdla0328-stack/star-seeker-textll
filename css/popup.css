@@ -85,3 +85,54 @@
   font-weight: 600;
   opacity: 0.65;
 }
+
+/* 캐릭터 팝업 (에키드나 등) */
+.character-popup {
+  position: fixed;
+  z-index: 61;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 48px), 460px);
+  padding: 18px 20px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 12px 40px rgba(90, 130, 180, 0.32);
+  cursor: pointer;
+  user-select: none;
+  animation: tp-in-center 0.24s ease;
+}
+.character-popup:hover {
+  box-shadow: 0 16px 44px rgba(90, 130, 180, 0.38);
+}
+.cp-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.cp-portrait {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(121, 184, 255, 0.5);
+  background: rgba(120, 160, 210, 0.12);
+}
+.cp-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.04em;
+}
+.cp-text {
+  font-size: 13px;
+  color: var(--navy);
+  line-height: 1.75;
+  font-weight: 500;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}

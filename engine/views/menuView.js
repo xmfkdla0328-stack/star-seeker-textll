@@ -1,4 +1,6 @@
 import { navigateTo } from '../router.js';
+import { applyMenuOnboarding } from './onboardingView.js';
+import { isOnboardingActive } from '../onboarding/onboardingFlow.js';
 
 export function renderMenuScreen() {
   const app = document.getElementById("app");
@@ -37,4 +39,8 @@ export function renderMenuScreen() {
   document.getElementById("btnMission").onclick = () => navigateTo('chapter');
   document.getElementById("btnArchive").onclick = () => alert("아카이브 컴포넌트는 추후 데이터 보안 해제 후 업데이트 예정입니다.");
   document.getElementById("btnWaiting").onclick = () => alert("대기실 컴포넌트는 인물 동기화 장치 구현 후 업데이트 예정입니다.");
+
+  if (isOnboardingActive()) {
+    applyMenuOnboarding(navigateTo);
+  }
 }

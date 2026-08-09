@@ -1,4 +1,6 @@
 import { navigateTo } from '../router.js';
+import { applyChapterOnboarding } from './onboardingView.js';
+import { isOnboardingActive } from '../onboarding/onboardingFlow.js';
 
 export function renderChapterScreen() {
   const app = document.getElementById("app");
@@ -33,4 +35,8 @@ export function renderChapterScreen() {
   };
   
   document.getElementById("btnBackToMenu").onclick = () => navigateTo('menu');
+
+  if (isOnboardingActive()) {
+    applyChapterOnboarding(navigateTo);
+  }
 }

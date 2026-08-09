@@ -1,11 +1,14 @@
 const ANCHOR_IDS = {
   choices:  'choicesBox',
   keywords: 'keywordRow',
+  mission:  'btnMission',
+  chapter0: 'chap0',
 };
 
 let activePopup = null;
+let activeCharacterPopup = null;
 
-export function showPopup({ scripts, anchor = 'center' }) {
+export function showPopup({ scripts, anchor = 'center', onClose } = {}) {
   hidePopup();
   let current = 0;
   const total = scripts.length;
@@ -38,6 +41,8 @@ export function showPopup({ scripts, anchor = 'center' }) {
     current++;
     if (current >= total) {
       popup.remove();
+      activePopup = null;
+      onClose?.();
     } else {
       popup.style.animation = 'none';
       render();
@@ -53,9 +58,62 @@ export function showPopup({ scripts, anchor = 'center' }) {
   requestAnimationFrame(() => positionPopup(popup, anchor));
 }
 
+export function showCharacterPopup({ character, scripts, onClose } = {}) {
+  hideCharacterPopup();
+  let current = 0;
+  const total = scripts.length;
+
+  const popup = document.createElement('div');
+  popup.className = 'character-popup';
+
+  const render = () => {
+    const isLast = current === total - 1;
+
+    let dotsHtml = '';
+    if (total > 1) {
+      dotsHtml = `<div class="tp-dots">${
+        Array.from({ length: total }, (_, i) =>
+          `<div class="tp-dot${i === current ? ' tp-dot-active' : ''}"></div>`
+        ).join('')
+      }</div>`;
+    }
+
+    popup.innerHTML = `
+      <div class="cp-header">
+        <img class="cp-portrait" src="${character.image}" alt="${character.name}">
+        <div class="cp-name">${character.name}</div>
+      </div>
+      <div class="cp-text">${scripts[current]}</div>
+      ${dotsHtml}
+      <div class="tp-hint">${isLast ? '클릭하여 닫기' : '클릭하여 계속 ›'}</div>
+    `;
+  };
+
+  popup.onclick = (e) => {
+    e.stopPropagation();
+    current++;
+    if (current >= total) {
+      popup.remove();
+      activeCharacterPopup = null;
+      onClose?.();
+    } else {
+      render();
+    }
+  };
+
+  render();
+  document.body.appendChild(popup);
+  activeCharacterPopup = popup;
+}
+
 export function hidePopup() {
   activePopup?.remove();
   activePopup = null;
+}
+
+export function hideCharacterPopup() {
+  activeCharacterPopup?.remove();
+  activeCharacterPopup = null;
 }
 
 function positionPopup(popup, anchor) {

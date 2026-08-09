@@ -1,5 +1,6 @@
 import {
   advanceOnboardingScript,
+  completeOnboarding,
   getCurrentOnboardingStep,
   getOnboardingState,
   moveToNextOnboardingStep,
@@ -7,6 +8,8 @@ import {
   startOnboarding,
 } from '../onboarding/onboardingFlow.js';
 import { formatOnboardingText } from '../onboarding/onboardingFlow.js';
+import { ONBOARDING_STEP_IDS } from '../../story/data/onboarding.js';
+import { showPopup, showCharacterPopup } from './tutorialPopup.js';
 
 let scanAnimationFrame = null;
 
@@ -260,10 +263,88 @@ export function renderOnboardingTitleGuide() {
   });
 
   startButton.addEventListener('click', () => {
-    moveToNextOnboardingStep();
-    // 메뉴 안내(#5)는 다음 단계에서 연결합니다.
-    document.getElementById('titleGuideScript').remove();
-    startButton.disabled = true;
-    startButton.textContent = '프로젝트 진입 준비 중...';
+    moveToNextOnboardingStep(); // → menuIntro
+    // navigateTo는 순환 참조를 피하기 위해 동적으로 가져옵니다.
+    import('../router.js').then(({ navigateTo }) => navigateTo('menu'));
+  });
+}
+
+// ─── 메뉴 화면 온보딩 (#5 menuIntro → #6 facilityGuide → #7 missionGuide) ───
+
+/**
+ * menuView.js에서 렌더링 직후 호출합니다.
+ * navigateFn: (screen, options?) => void  (router의 navigateTo)
+ */
+export function applyMenuOnboarding(navigateFn) {
+  const state = getOnboardingState();
+  if (!state) return;
+
+  const step = state.step;
+  const formatted = (arr) => arr.map(s => formatOnboardingText(s, state.codename));
+
+  if (state.stepId === ONBOARDING_STEP_IDS.MENU_INTRO) {
+    showPopup({
+      scripts: formatted(step.scripts),
+      anchor: 'center',
+      onClose: () => {
+        moveToNextOnboardingStep(); // → facilityGuide
+        applyMenuOnboarding(navigateFn);
+      },
+    });
+
+  } else if (state.stepId === ONBOARDING_STEP_IDS.FACILITY_GUIDE) {
+    showCharacterPopup({
+      character: step.character,
+      scripts: formatted(step.scripts),
+      onClose: () => {
+        moveToNextOnboardingStep(); // → missionGuide
+        applyMenuOnboarding(navigateFn);
+      },
+    });
+
+  } else if (state.stepId === ONBOARDING_STEP_IDS.MISSION_GUIDE) {
+    showPopup({
+      scripts: formatted(step.scripts),
+      anchor: 'mission',
+      onClose: () => {
+        // 팝업 닫힌 후 임무 개시 클릭 시 챕터로 진입
+        const missionBtn = document.getElementById('btnMission');
+        if (missionBtn) {
+          missionBtn.onclick = () => {
+            moveToNextOnboardingStep(); // → chapterGuide
+            navigateFn('chapter');
+          };
+        }
+      },
+    });
+  }
+}
+
+// ─── 챕터 화면 온보딩 (#8 chapterGuide) ───
+
+/**
+ * chapterScreen.js에서 렌더링 직후 호출합니다.
+ * navigateFn: (screen, options?) => void
+ */
+export function applyChapterOnboarding(navigateFn) {
+  const state = getOnboardingState();
+  if (!state || state.stepId !== ONBOARDING_STEP_IDS.CHAPTER_GUIDE) return;
+
+  const step = state.step;
+  const formatted = step.scripts.map(s => formatOnboardingText(s, state.codename));
+
+  showPopup({
+    scripts: formatted,
+    anchor: 'chapter0',
+    onClose: () => {
+      // 팝업 닫힌 후 케일런-9 클릭 시 온보딩 완료 후 게임 시작
+      const chap0 = document.getElementById('chap0');
+      if (chap0) {
+        chap0.onclick = () => {
+          completeOnboarding();
+          navigateFn('game', { mode: 'new' });
+        };
+      }
+    },
   });
 }
