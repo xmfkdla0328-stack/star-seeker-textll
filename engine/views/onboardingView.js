@@ -283,9 +283,10 @@ export function applyMenuOnboarding(navigateFn) {
   const formatted = (arr) => arr.map(s => formatOnboardingText(s, state.codename));
 
   if (state.stepId === ONBOARDING_STEP_IDS.MENU_INTRO) {
+    // 두 문장을 한 창에 합쳐서 표시, 에키드나 팝업과 동일한 하단 위치
     showPopup({
-      scripts: formatted(step.scripts),
-      anchor: 'center',
+      scripts: [formatted(step.scripts).join('\n')],
+      anchor: 'bottom',
       onClose: () => {
         moveToNextOnboardingStep(); // → facilityGuide
         applyMenuOnboarding(navigateFn);

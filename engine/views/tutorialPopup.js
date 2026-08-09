@@ -122,6 +122,11 @@ function positionPopup(popup, anchor) {
     return;
   }
 
+  if (anchor === 'bottom') {
+    popup.classList.add('tp-bottom');
+    return;
+  }
+
   const anchorId = ANCHOR_IDS[anchor];
   const el = anchorId ? document.getElementById(anchorId) : null;
 

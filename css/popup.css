@@ -29,6 +29,17 @@
 .tutorial-popup.tp-center:hover {
   transform: translate(-50%, -52%);
 }
+/* 하단 고정 모드 (캐릭터 팝업과 동일 위치) */
+.tutorial-popup.tp-bottom {
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto;
+  width: min(calc(100% - 48px), 460px);
+}
+.tutorial-popup.tp-bottom:hover {
+  transform: translateX(-50%) translateY(-2px);
+}
 
 @keyframes tp-in {
   from { opacity: 0; transform: translateY(8px); }
