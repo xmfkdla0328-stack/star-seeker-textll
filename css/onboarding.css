@@ -91,9 +91,18 @@
   transition: width 0.08s linear;
 }
 
+.onboarding-next-hint {
+  margin-top: 20px;
+  color: #6a8eb0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+}
+
 .scan-complete-btn {
   display: block;
-  margin: 28px 0 0 auto;
+  margin: 28px auto 0;
 }
 
 .scan-complete-btn.is-ready {
@@ -180,6 +189,7 @@
 .onboarding-title-script {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: min(100%, 430px);
   margin-top: 18px;
   padding: 14px 16px 13px;
@@ -187,7 +197,7 @@
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.72);
   color: var(--navy);
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(90, 130, 180, 0.16);
   animation: onboarding-guide-in 0.28s ease;
@@ -217,7 +227,7 @@
 }
 
 .onboarding-title-script-hint {
-  align-self: flex-end;
+  align-self: center;
   margin-top: 8px;
   color: var(--navy-soft);
   font-size: 10px;
