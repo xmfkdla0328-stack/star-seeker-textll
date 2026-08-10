@@ -324,7 +324,7 @@ export function applyMenuOnboarding(navigateFn) {
 // ─── 챕터 화면 온보딩 (#8 chapterGuide) ───
 
 /**
- * chapterScreen.js에서 렌더링 직후 호출합니다.
+ * chapterView.js에서 렌더링 직후 호출합니다.
  * navigateFn: (screen, options?) => void
  */
 export function applyChapterOnboarding(navigateFn) {

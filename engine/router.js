@@ -1,6 +1,6 @@
 import { renderTitleScreen } from './views/titleView.js';
 import { renderMenuScreen } from './views/menuView.js';
-import { renderChapterScreen } from './views/chapterScreen.js';
+import { renderChapterScreen } from './views/chapterView.js';
 import { setupGameplayLayout } from './views/gameView.js';
 
 export function navigateTo(screen, options = {}) {
