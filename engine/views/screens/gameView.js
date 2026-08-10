@@ -1,7 +1,7 @@
-import { resetState, restoreState, state } from '../state.js';
-import { navigateTo } from '../router.js';
-import { renderNode } from './storyPanel.js';
-import { getActiveSave, isTutorialCompleted } from '../storage.js';
+import { resetState, restoreState, state } from '../../state.js';
+import { navigateTo } from '../../router.js';
+import { renderNode } from '../panels/storyPanel.js';
+import { getActiveSave, isTutorialCompleted } from '../../storage.js';
 
 export function setupGameplayLayout({ mode = 'new' } = {}) {
   const app = document.getElementById("app");

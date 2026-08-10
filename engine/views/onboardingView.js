@@ -9,7 +9,7 @@ import {
 } from '../onboarding/onboardingFlow.js';
 import { formatOnboardingText } from '../onboarding/onboardingFlow.js';
 import { ONBOARDING_STEP_IDS } from '../../story/data/onboarding.js';
-import { showPopup, showCharacterPopup } from './tutorialPopup.js';
+import { showPopup, showCharacterPopup } from './components/tutorialPopup.js';
 
 let scanAnimationFrame = null;
 

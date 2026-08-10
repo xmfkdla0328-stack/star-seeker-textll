@@ -1,15 +1,15 @@
-import { navigateTo } from '../router.js';
+import { navigateTo } from '../../router.js';
 import {
   clearActiveSave,
   hasActiveSave,
   isTutorialCompleted,
-} from '../storage.js';
-import { showResumeDialog } from './resumeDialog.js';
+} from '../../storage.js';
+import { showResumeDialog } from '../components/resumeDialog.js';
 import {
   renderOnboardingIdentity,
   renderOnboardingTitleGuide,
-} from './onboardingView.js';
-import { startOnboarding } from '../onboarding/onboardingFlow.js';
+} from '../onboardingView.js';
+import { startOnboarding } from '../../onboarding/onboardingFlow.js';
 
 export function renderTitleScreen({ onboardingGuide = false } = {}) {
   const app = document.getElementById("app");

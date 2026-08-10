@@ -1,7 +1,7 @@
-import { renderTitleScreen } from './views/titleView.js';
-import { renderMenuScreen } from './views/menuView.js';
-import { renderChapterScreen } from './views/chapterView.js';
-import { setupGameplayLayout } from './views/gameView.js';
+import { renderTitleScreen } from './views/screens/titleView.js';
+import { renderMenuScreen } from './views/screens/menuView.js';
+import { renderChapterScreen } from './views/screens/chapterView.js';
+import { setupGameplayLayout } from './views/screens/gameView.js';
 
 export function navigateTo(screen, options = {}) {
   const app = document.getElementById("app");

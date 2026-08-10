@@ -1,4 +1,4 @@
-import { state } from '../state.js';
+import { state } from '../../state.js';
 
 export function runDiceCheck(check, onComplete) {
   const overlay = document.getElementById("diceOverlay");

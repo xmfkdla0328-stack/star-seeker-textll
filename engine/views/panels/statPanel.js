@@ -1,5 +1,5 @@
-import { STAT_KEYS, KEYWORD_DATA } from '../../story/constants.js';
-import { state } from '../state.js';
+import { STAT_KEYS, KEYWORD_DATA } from '../../../story/constants.js';
+import { state } from '../../state.js';
 
 export function renderStats() {
   const row = document.getElementById("statRow");

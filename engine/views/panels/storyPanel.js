@@ -1,12 +1,11 @@
-import { STORY } from '../../story/storyHub.js';
-import { state, resetState, hasKeyword } from '../state.js';
+import { STORY } from '../../../story/storyHub.js';
+import { state, resetState, hasKeyword } from '../../state.js';
 import { renderStats, renderKeywords } from './statPanel.js';
 import { renderScene } from './scenePanel.js';
 import { runDiceCheck } from './diceOverlay.js';
-import { setupGameplayLayout } from './gameView.js';
-import { showPopup } from './tutorialPopup.js';
-import { hidePopup } from './tutorialPopup.js';
-import { isTutorialCompleted, saveActiveGame } from '../storage.js';
+import { setupGameplayLayout } from '../screens/gameView.js';
+import { showPopup, hidePopup } from '../components/tutorialPopup.js';
+import { isTutorialCompleted, saveActiveGame } from '../../storage.js';
 
 export function renderNode(id, { skipOnEnter = false } = {}) {
   hidePopup();

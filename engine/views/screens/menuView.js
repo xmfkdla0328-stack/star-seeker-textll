@@ -1,6 +1,6 @@
-import { navigateTo } from '../router.js';
-import { applyMenuOnboarding } from './onboardingView.js';
-import { isOnboardingActive } from '../onboarding/onboardingFlow.js';
+import { navigateTo } from '../../router.js';
+import { applyMenuOnboarding } from '../onboardingView.js';
+import { isOnboardingActive } from '../../onboarding/onboardingFlow.js';
 
 export function renderMenuScreen() {
   const app = document.getElementById("app");
