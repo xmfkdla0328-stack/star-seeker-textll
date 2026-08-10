@@ -1,5 +1,5 @@
 import { navigateTo } from '../../router.js';
-import { applyChapterOnboarding } from '../onboardingView.js';
+import { applyChapterOnboarding } from '../../onboarding/onboardingOverlay.js';
 import { isOnboardingActive } from '../../onboarding/onboardingFlow.js';
 
 export function renderChapterScreen() {

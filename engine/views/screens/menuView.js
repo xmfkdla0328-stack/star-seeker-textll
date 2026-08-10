@@ -1,5 +1,5 @@
 import { navigateTo } from '../../router.js';
-import { applyMenuOnboarding } from '../onboardingView.js';
+import { applyMenuOnboarding } from '../../onboarding/onboardingOverlay.js';
 import { isOnboardingActive } from '../../onboarding/onboardingFlow.js';
 
 export function renderMenuScreen() {

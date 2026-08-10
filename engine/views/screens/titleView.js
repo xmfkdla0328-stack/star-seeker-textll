@@ -8,7 +8,7 @@ import { showResumeDialog } from '../components/resumeDialog.js';
 import {
   renderOnboardingIdentity,
   renderOnboardingTitleGuide,
-} from '../onboardingView.js';
+} from '../../onboarding/onboardingScreens.js';
 import { startOnboarding } from '../../onboarding/onboardingFlow.js';
 
 export function renderTitleScreen({ onboardingGuide = false } = {}) {

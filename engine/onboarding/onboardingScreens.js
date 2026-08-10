@@ -1,15 +1,12 @@
 import {
   advanceOnboardingScript,
-  completeOnboarding,
   getCurrentOnboardingStep,
   getOnboardingState,
   moveToNextOnboardingStep,
   setOnboardingCodename,
   startOnboarding,
-} from '../onboarding/onboardingFlow.js';
-import { formatOnboardingText } from '../onboarding/onboardingFlow.js';
-import { ONBOARDING_STEP_IDS } from '../../story/data/onboarding.js';
-import { showPopup, showCharacterPopup } from './components/tutorialPopup.js';
+  formatOnboardingText,
+} from './onboardingFlow.js';
 
 let scanAnimationFrame = null;
 
@@ -25,6 +22,8 @@ function renderScriptLines(container, scripts, codename) {
     container.appendChild(paragraph);
   });
 }
+
+// ─── #1 코드 네임 입력 ───
 
 export function renderOnboardingIdentity() {
   const state = getOnboardingState() || startOnboarding();
@@ -88,6 +87,8 @@ export function renderOnboardingIdentity() {
     renderOnboardingScan();
   });
 }
+
+// ─── #2 신체 스캔 ───
 
 export function renderOnboardingScan() {
   cancelScanAnimation();
@@ -173,6 +174,8 @@ function cancelScanAnimation() {
   }
 }
 
+// ─── #3 프로젝트 가동 ───
+
 export function renderOnboardingActivation() {
   cancelScanAnimation();
 
@@ -196,14 +199,12 @@ export function renderOnboardingActivation() {
   renderScriptLines(script, step.scripts, state.codename);
 
   document.getElementById('activationWindow').addEventListener('click', () => {
-    renderTitleGuide();
+    moveToNextOnboardingStep();
+    renderOnboardingTitleGuide();
   }, { once: true });
 }
 
-function renderTitleGuide() {
-  moveToNextOnboardingStep();
-  renderOnboardingTitleGuide();
-}
+// ─── #4 타이틀 화면 안내 ───
 
 export function renderOnboardingTitleGuide() {
   const state = getOnboardingState();
@@ -264,88 +265,7 @@ export function renderOnboardingTitleGuide() {
 
   startButton.addEventListener('click', () => {
     moveToNextOnboardingStep(); // → menuIntro
-    // navigateTo는 순환 참조를 피하기 위해 동적으로 가져옵니다.
+    // 순환 참조를 피하기 위해 동적으로 가져옵니다.
     import('../router.js').then(({ navigateTo }) => navigateTo('menu'));
-  });
-}
-
-// ─── 메뉴 화면 온보딩 (#5 menuIntro → #6 facilityGuide → #7 missionGuide) ───
-
-/**
- * menuView.js에서 렌더링 직후 호출합니다.
- * navigateFn: (screen, options?) => void  (router의 navigateTo)
- */
-export function applyMenuOnboarding(navigateFn) {
-  const state = getOnboardingState();
-  if (!state) return;
-
-  const step = state.step;
-  const formatted = (arr) => arr.map(s => formatOnboardingText(s, state.codename));
-
-  if (state.stepId === ONBOARDING_STEP_IDS.MENU_INTRO) {
-    // 두 문장을 한 창에 합쳐서 표시, 에키드나 팝업과 동일한 하단 위치
-    showPopup({
-      scripts: [formatted(step.scripts).join('\n')],
-      anchor: 'bottom',
-      onClose: () => {
-        moveToNextOnboardingStep(); // → facilityGuide
-        applyMenuOnboarding(navigateFn);
-      },
-    });
-
-  } else if (state.stepId === ONBOARDING_STEP_IDS.FACILITY_GUIDE) {
-    showCharacterPopup({
-      character: step.character,
-      scripts: formatted(step.scripts),
-      onClose: () => {
-        moveToNextOnboardingStep(); // → missionGuide
-        applyMenuOnboarding(navigateFn);
-      },
-    });
-
-  } else if (state.stepId === ONBOARDING_STEP_IDS.MISSION_GUIDE) {
-    showPopup({
-      scripts: formatted(step.scripts),
-      anchor: 'mission',
-      onClose: () => {
-        // 팝업 닫힌 후 임무 개시 클릭 시 챕터로 진입
-        const missionBtn = document.getElementById('btnMission');
-        if (missionBtn) {
-          missionBtn.onclick = () => {
-            moveToNextOnboardingStep(); // → chapterGuide
-            navigateFn('chapter');
-          };
-        }
-      },
-    });
-  }
-}
-
-// ─── 챕터 화면 온보딩 (#8 chapterGuide) ───
-
-/**
- * chapterView.js에서 렌더링 직후 호출합니다.
- * navigateFn: (screen, options?) => void
- */
-export function applyChapterOnboarding(navigateFn) {
-  const state = getOnboardingState();
-  if (!state || state.stepId !== ONBOARDING_STEP_IDS.CHAPTER_GUIDE) return;
-
-  const step = state.step;
-  const formatted = step.scripts.map(s => formatOnboardingText(s, state.codename));
-
-  showPopup({
-    scripts: formatted,
-    anchor: 'chapter0',
-    onClose: () => {
-      // 팝업 닫힌 후 케일런-9 클릭 시 온보딩 완료 후 게임 시작
-      const chap0 = document.getElementById('chap0');
-      if (chap0) {
-        chap0.onclick = () => {
-          completeOnboarding();
-          navigateFn('game', { mode: 'new' });
-        };
-      }
-    },
   });
 }
